@@ -1,0 +1,39 @@
+[project]
+name = "iupac2smiles"
+version = "0.1.0"
+description = "IUPAC chemical names to SMILES with a fallback cascade: OPSIN -> IUPAC2Struct -> ChemConv"
+readme = "README.md"
+license = "MIT"
+authors = [{ name = "Vasilij Epishkin" }]
+requires-python = ">=3.10"
+keywords = ["cheminformatics", "iupac", "smiles", "opsin", "transformer"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Chemistry",
+]
+dependencies = ["pandas>=1.5"]
+
+[project.optional-dependencies]
+ml = ["torch>=2.0", "numpy", "tqdm", "chemical-converters>=0.1.2"]
+bench = ["rdkit"]
+dev = ["pytest", "ruff"]
+
+[project.scripts]
+iupac2smiles = "iupac2smiles.__main__:main"
+
+[project.urls]
+Repository = "https://github.com/VasilijEpishkin/iupac2smiles"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+line-length = 120
+extend-exclude = ["src/iupac2smiles/_vendor"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
