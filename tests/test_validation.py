@@ -50,9 +50,7 @@ def test_invalid_smiles_is_rejected_and_falls_back(monkeypatch):
 
 
 def test_cli_detailed_validation_csv(tmp_path, monkeypatch):
-    monkeypatch.setattr(
-        router, "BACKENDS", {"rules": backend({"ethanol": "CCO", "invalid": "C1("})}
-    )
+    monkeypatch.setattr(router, "BACKENDS", {"rules": backend({"ethanol": "CCO", "invalid": "C1("})})
     out = tmp_path / "result.csv"
     assert main(["-n", "ethanol", "-n", "invalid", "--validate-smiles", "--details", "-o", str(out)]) == 0
     assert out.read_text().splitlines() == [
