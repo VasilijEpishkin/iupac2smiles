@@ -1,10 +1,14 @@
 """Offline unit tests for benchmark parser and RDKit metrics."""
 
+import runpy
+from pathlib import Path
+
 import pytest
 
 pytest.importorskip("rdkit")
 
-from scripts.benchmark import load, score
+benchmark = runpy.run_path(str(Path(__file__).resolve().parents[1] / "scripts" / "benchmark.py"))
+load, score = benchmark["load"], benchmark["score"]
 
 
 def test_loader_keeps_commas_in_chemical_names(tmp_path):
