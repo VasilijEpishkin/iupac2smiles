@@ -92,6 +92,12 @@ curl -LO https://raw.githubusercontent.com/sergsb/IUPAC2Struct/main/data/smiles_
 python scripts/benchmark.py 80.csv -n 200
 ```
 
+## Landscape and benchmark interpretation
+
+A [Russian-language survey of existing name-to-structure tools](docs/landscape.ru.md) compares
+OPSIN, neural models and multi-source resolvers (MoleculeResolver, PubChem and others).
+Accuracy claims require independent evaluation; RDKit-valid output alone is insufficient.
+
 ## Development
 
 ```bash
