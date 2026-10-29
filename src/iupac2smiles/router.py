@@ -7,8 +7,9 @@ A syntactically valid SMILES does not prove the structure matches its IUPAC name
 from __future__ import annotations
 
 import logging
+from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Any, Callable
+from typing import Any
 
 from . import chemconv, iupac2struct, opsin
 
@@ -43,7 +44,9 @@ def _smiles_validator() -> Callable[[str], bool]:
     try:
         from rdkit import Chem, rdBase
     except ImportError as exc:
-        raise RuntimeError('SMILES validation requires RDKit. Install with pip install "iupac2smiles[validate]".') from exc
+        raise RuntimeError(
+            'SMILES validation requires RDKit. Install with pip install "iupac2smiles[validate]".'
+        ) from exc
 
     def is_valid(smiles: str) -> bool:
         try:
@@ -79,10 +82,7 @@ def convert_detailed(
         raise ValueError("Duplicate backends are not allowed")
 
     params = converter_params or {}
-    records = [
-        ConversionResult(n, "", None, "unconverted" if n.strip() else "empty_input")
-        for n in names
-    ]
+    records = [ConversionResult(n, "", None, "unconverted" if n.strip() else "empty_input") for n in names]
     pending = [i for i, n in enumerate(names) if n.strip()]
     is_valid = _smiles_validator() if validate_smiles and pending else None
     errors: list[tuple[str, Exception]] = []
