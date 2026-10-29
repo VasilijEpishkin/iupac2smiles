@@ -16,7 +16,8 @@ dependencies = ["pandas>=1.5"]
 [project.optional-dependencies]
 ml = ["torch>=2.0", "numpy", "tqdm", "chemical-converters>=0.1.2"]
 bench = ["rdkit"]
-dev = ["pytest", "ruff"]
+validate = ["rdkit"]
+dev = ["pytest", "ruff", "rdkit"]
 
 [project.scripts]
 iupac2smiles = "iupac2smiles.__main__:main"

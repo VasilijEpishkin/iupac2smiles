@@ -15,7 +15,7 @@ names ──► OPSIN ──failed──► IUPAC2Struct ──failed──► C
 
 | Backend | Type | Notes |
 |---|---|---|
-| [OPSIN](https://github.com/dan2097/opsin) | Rule-based grammar | Exact when it parses; returns nothing for names it doesn't understand |
+| [OPSIN](https://github.com/dan2097/opsin) | Rule-based grammar | High-precision when it parses; returns nothing for names it doesn't understand |
 | [IUPAC2Struct](https://github.com/sergsb/IUPAC2Struct) | Transformer (Krasnov et al., 2021) | Fails only when a name can't be tokenized |
 | [ChemConv](https://huggingface.co/knowledgator/IUPAC2SMILES-canonical-base) | Seq2seq (Knowledgator) | Always produces *some* SMILES, so it runs last as a catch-all |
 
@@ -44,7 +44,7 @@ Model files are **not** stored in the repo. On first use they are downloaded onc
 from iupac2smiles import iupac_to_smiles
 
 iupac_to_smiles(["ethanol", "2-acetyloxybenzoic acid", "not a molecule"])
-# ['C(C)O', 'C(C)(=O)OC1=C(C(=O)O)C=CC=C1', '...']
+# Example only; ML models can return an incorrect but well-formed structure
 
 # From CSV, only some backends, with backend options
 iupac_to_smiles(
@@ -80,6 +80,30 @@ iupac2smiles names.csv -b opsin          # rule-based only, no ML dependencies
 | `IUPAC2SMILES_CACHE` | Cache directory for downloaded models |
 | `OPSIN_JAR_PATH` | Use a local OPSIN jar |
 | `IUPAC2STRUCT_MODEL_PATH` | Use a local `iupac2smiles_model.pt` |
+
+### Verification and conversion provenance
+
+Pass `--validate-smiles` to reject outputs that RDKit cannot parse/sanitize. An invalid candidate
+is sent to the next backend; a row may still be unconverted after all backends.
+This is **structural validity checking, not IUPAC-name-to-structure correctness verification**:
+a chemically valid SMILES produced by a neural model can still describe the wrong molecule.
+
+```bash
+pip install -e ".[validate]"
+iupac2smiles names.csv --validate-smiles --details -o smiles.csv
+```
+
+`--details` adds `backend` (the producing parser/model) and `status`
+(`converted`, `unconverted`, `invalid_smiles`, `empty_input`) columns.
+The original two-column CLI output remains the default. Python callers can opt in:
+
+```python
+rows = iupac_to_smiles(["ethanol", "unrecognized name"], validate_smiles=True, return_details=True)
+for row in rows:
+    print(row.name, row.smiles, row.backend, row.status)
+```
+
+RDKit is optional for ordinary conversion. Installing `[ml]` is still optional for OPSIN-only operation.
 
 ## Benchmark
 
