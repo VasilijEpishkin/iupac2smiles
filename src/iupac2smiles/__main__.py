@@ -35,7 +35,9 @@ def main(argv: list[str] | None = None) -> int:
     backends = [b.strip() for b in args.backends.split(",") if b.strip()]
 
     names = args.name or read_names(args.csv, args.column).tolist()
-    records = iupac_to_smiles(names, backends=backends, validate_smiles=args.validate_smiles, return_details=True)
+    records = iupac_to_smiles(
+        names, backends=backends, validate_smiles=args.validate_smiles, return_details=True
+    )
 
     import pandas as pd
 
