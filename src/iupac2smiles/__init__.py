@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from .io import read_names
-from .router import BACKENDS, ConverterError, ConversionResult, convert_detailed
+from .router import BACKENDS, ConversionResult, ConverterError, convert_detailed
 
 __all__ = ["BACKENDS", "ConversionResult", "ConverterError", "iupac_to_smiles"]
 __version__ = "0.1.0"
